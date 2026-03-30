@@ -1,6 +1,8 @@
 # chat-with-news
 workflows n8n pour parler avec une ia sur les actualités cyber
 
+n8n automatise workflows IA, connecte APIs, orchestre données sans code
+
 👉 Objectif : ne plus jamais rater une actu cyber… et pouvoir les interroger intelligemment.
 
 
