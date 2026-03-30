@@ -39,4 +39,4 @@ Ensuite, j’ai connecté ce Google Sheet à un agent IA.
 
 - ⏱ Gain de temps énorme (veille automatisée)
 - 🧠 Accès intelligent à l’info (via IA)
-- 🔄 Système évolutif (autres sources, enrichissement, scoring…)
+- 🔄 Système évolutif (autres sources, interconnecter avec d’autres outils/API, enrichissement, scoring…)
