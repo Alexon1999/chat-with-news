@@ -32,6 +32,7 @@ Ensuite, j’ai connecté ce Google Sheet à un agent IA.
 - “Donne-moi les actus cyber du jour”
 - “Fais-moi un résumé des dernières attaques”
 - “Quelles tendances cette semaine ?”
+- “Quels sont les vulnérabilités trouvées aujourd'hui ?“
 - “Peux-tu me détailler CVE-2026-3055 ?“
 
 💡 L’IA ne devine pas : elle s’appuie directement sur les données collectées.
