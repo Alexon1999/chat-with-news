@@ -1,0 +1,164 @@
+{
+  "name": "Chat with the news",
+  "nodes": [
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chatTrigger",
+      "typeVersion": 1.4,
+      "position": [
+        288,
+        0
+      ],
+      "id": "261ee04a-4695-4d1a-bec3-9f86b5efd5eb",
+      "name": "When chat message received",
+      "webhookId": "b567d98b-aabb-4963-b0f8-6b1e8b5f8959"
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "mode": "list",
+          "value": "gpt-4.1-mini"
+        },
+        "responsesApiEnabled": false,
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.3,
+      "position": [
+        512,
+        224
+      ],
+      "id": "201ee441-da46-49fc-befa-312ad4b60479",
+      "name": "OpenAI Model",
+      "credentials": {
+        "openAiApi": {
+          "id": "7Awha0vpTwHfXhUN",
+          "name": "n8n free OpenAI API credits"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "options": {
+          "systemMessage": "Utilise le google sheet pour répondre aux questions"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3,
+      "position": [
+        576,
+        0
+      ],
+      "id": "e481d1a1-3a3d-4583-98ae-87a9b39471a8",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {},
+      "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+      "typeVersion": 1.3,
+      "position": [
+        640,
+        224
+      ],
+      "id": "aa874554-17b1-41a1-9e1f-8c6c197e7e2f",
+      "name": "Simple Memory"
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "1UewxlV876X6lIvcYReB-tMXNmW8CwTkbxLBXmAMVQwg",
+          "mode": "list",
+          "cachedResultName": "Actu Cybersécurité",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1UewxlV876X6lIvcYReB-tMXNmW8CwTkbxLBXmAMVQwg/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Feuille 1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1UewxlV876X6lIvcYReB-tMXNmW8CwTkbxLBXmAMVQwg/edit#gid=0"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheetsTool",
+      "typeVersion": 4.7,
+      "position": [
+        848,
+        208
+      ],
+      "id": "50aa6e54-0773-4fe1-8fb6-78d71e70c380",
+      "name": "Get row(s) in sheet in Google Sheets",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "jeFUBlrSNcTeyNNc",
+          "name": "Google Sheets OAuth2 API"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "When chat message received": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Simple Memory": {
+      "ai_memory": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get row(s) in sheet in Google Sheets": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  },
+  "versionId": "7ace0d5e-62fe-449c-8ac8-f4ed260875ef",
+  "meta": {
+    "templateId": "ready-to-run-ai-workflow-v5",
+    "templateCredsSetupCompleted": true,
+    "instanceId": "0815f0d98faadefb386a3ca28f2aead7a112e8994c9d4091c9e76b21735ed0ae"
+  },
+  "id": "UQHHHQU4hDrZFuFl",
+  "tags": []
+}

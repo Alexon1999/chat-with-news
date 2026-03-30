@@ -1,0 +1,517 @@
+{
+  "name": "Fetch Actu Cybersécurité",
+  "nodes": [
+    {
+      "parameters": {
+        "url": "https://www.it-connect.fr/actualites/actu-securite/",
+        "options": {}
+      },
+      "id": "f9bcdb10-97d2-47ab-8ff6-1540b4f9c95d",
+      "name": "Fetch Article List",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        480,
+        304
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "extractHtmlContent",
+        "extractionValues": {
+          "values": [
+            {
+              "key": "title",
+              "cssSelector": ".cm-primary .cm-entry-title a",
+              "returnArray": true
+            },
+            {
+              "key": "url",
+              "cssSelector": ".cm-primary article a[href*=\"it-connect.fr\"]",
+              "returnValue": "attribute",
+              "attribute": "href",
+              "returnArray": true
+            },
+            {
+              "key": "image",
+              "cssSelector": ".cm-primary article a img",
+              "returnValue": "attribute",
+              "attribute": "src",
+              "returnArray": true
+            },
+            {
+              "key": "excerpt",
+              "cssSelector": ".cm-primary article p",
+              "returnArray": true
+            },
+            {
+              "key": "date",
+              "cssSelector": ".cm-primary .entry-date",
+              "returnValue": "attribute",
+              "attribute": "datetime",
+              "returnArray": true
+            },
+            {
+              "key": "category",
+              "cssSelector": ".cm-primary .cm-post-categories a",
+              "returnArray": true
+            }
+          ]
+        },
+        "options": {
+          "trimValues": true,
+          "cleanUpText": false
+        }
+      },
+      "id": "4a1cac0b-92f1-4a36-9de7-0ed98f1e864e",
+      "name": "Extract Article Links",
+      "type": "n8n-nodes-base.html",
+      "typeVersion": 1.2,
+      "position": [
+        704,
+        304
+      ],
+      "retryOnFail": false
+    },
+    {
+      "parameters": {
+        "fieldToSplitOut": "title, url, image, excerpt, date, category",
+        "include": "=",
+        "options": {}
+      },
+      "id": "a453a582-0821-440a-9b39-d7c92f33434b",
+      "name": "Split Articles",
+      "type": "n8n-nodes-base.splitOut",
+      "typeVersion": 1,
+      "position": [
+        944,
+        304
+      ]
+    },
+    {
+      "parameters": {
+        "url": "={{ $json.url }}",
+        "options": {}
+      },
+      "id": "9210beb4-1ac1-4e00-922b-3dc553d046f1",
+      "name": "Fetch Full Article",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1856,
+        400
+      ]
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "id-1",
+              "name": "title",
+              "value": "={{ $('Split Articles').item.json.title }}",
+              "type": "string"
+            },
+            {
+              "id": "id-2",
+              "name": "url",
+              "value": "={{ $('Split Articles').item.json.url }}",
+              "type": "string"
+            },
+            {
+              "id": "id-3",
+              "name": "image",
+              "value": "={{ $('Split Articles').item.json.image }}",
+              "type": "string"
+            },
+            {
+              "id": "id-4",
+              "name": "excerpt",
+              "value": "={{ $('Split Articles').item.json.excerpt }}",
+              "type": "string"
+            },
+            {
+              "id": "d3966230-f54e-4ff9-92d6-27fbbb832a98",
+              "name": "date",
+              "value": "={{ $('Split Articles').item.json.date }}",
+              "type": "string"
+            },
+            {
+              "id": "4814aea6-91a8-4a3a-b906-67fb9501b3c9",
+              "name": "category",
+              "value": "={{ $('Split Articles').item.json.category }}",
+              "type": "string"
+            },
+            {
+              "id": "id-5",
+              "name": "full_article_text",
+              "value": "={{ $json.full_article_text }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "7d225eb9-855b-4009-8fd6-cad28423bfaf",
+      "name": "Merge Article Data",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1856,
+        832
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "appendOrUpdate",
+        "documentId": {
+          "__rl": true,
+          "value": "1UewxlV876X6lIvcYReB-tMXNmW8CwTkbxLBXmAMVQwg",
+          "mode": "list",
+          "cachedResultName": "Actu Cybersécurité",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1UewxlV876X6lIvcYReB-tMXNmW8CwTkbxLBXmAMVQwg/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Feuille 1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1UewxlV876X6lIvcYReB-tMXNmW8CwTkbxLBXmAMVQwg/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "autoMapInputData",
+          "value": {},
+          "matchingColumns": [
+            "title"
+          ],
+          "schema": [
+            {
+              "id": "title",
+              "displayName": "title",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "url",
+              "displayName": "url",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "image",
+              "displayName": "image",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "excerpt",
+              "displayName": "excerpt",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "date",
+              "displayName": "date",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "category",
+              "displayName": "category",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "full_article_text",
+              "displayName": "full_article_text",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "id": "745e4f06-3710-4690-aa2d-40354b58c35d",
+      "name": "Save to Google Sheets",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.5,
+      "position": [
+        2240,
+        304
+      ],
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "jeFUBlrSNcTeyNNc",
+          "name": "Google Sheets OAuth2 API"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "triggerAtHour": 9
+            }
+          ]
+        }
+      },
+      "id": "b0c87a7b-83ce-453e-a7bd-972b07c5d65c",
+      "name": "Daily Fetch Trigger",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        256,
+        304
+      ]
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        272,
+        112
+      ],
+      "id": "795e87c5-9702-41cd-8b75-7979479e2e9b",
+      "name": "When clicking ‘Execute workflow’"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "de8c9dc4-d47b-499e-b085-0d7dbc3daca5",
+              "leftValue": "={{ $json.category }}",
+              "rightValue": "Actu Cybersécurité",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.filter",
+      "typeVersion": 2.3,
+      "position": [
+        1152,
+        304
+      ],
+      "id": "351427e0-49c6-4020-b9bf-d82084bb74e4",
+      "name": "Filter"
+    },
+    {
+      "parameters": {
+        "options": {
+          "reset": false
+        }
+      },
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        1568,
+        304
+      ],
+      "id": "bc241315-1b01-406a-8006-bc6c92cd56ab",
+      "name": "Loop Over Items"
+    },
+    {
+      "parameters": {
+        "operation": "extractHtmlContent",
+        "extractionValues": {
+          "values": [
+            {
+              "key": "full_article_text",
+              "cssSelector": ".cm-entry-summary"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.html",
+      "typeVersion": 1.2,
+      "position": [
+        1856,
+        608
+      ],
+      "id": "5e35412d-a612-47d5-8083-1b325c980477",
+      "name": "HTML"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Fetch Article List": {
+      "main": [
+        [
+          {
+            "node": "Extract Article Links",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Extract Article Links": {
+      "main": [
+        [
+          {
+            "node": "Split Articles",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Split Articles": {
+      "main": [
+        [
+          {
+            "node": "Filter",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Fetch Full Article": {
+      "main": [
+        [
+          {
+            "node": "HTML",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Merge Article Data": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Daily Fetch Trigger": {
+      "main": [
+        [
+          {
+            "node": "Fetch Article List",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "When clicking ‘Execute workflow’": {
+      "main": [
+        [
+          {
+            "node": "Fetch Article List",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Filter": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Loop Over Items": {
+      "main": [
+        [
+          {
+            "node": "Save to Google Sheets",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Fetch Full Article",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTML": {
+      "main": [
+        [
+          {
+            "node": "Merge Article Data",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Save to Google Sheets": {
+      "main": [
+        []
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "versionId": "e6b26514-e242-4ead-8670-2106e43756df",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "0815f0d98faadefb386a3ca28f2aead7a112e8994c9d4091c9e76b21735ed0ae"
+  },
+  "id": "Ds3mc4GqmYEA0ZCj",
+  "tags": []
+}
